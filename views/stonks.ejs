@@ -2,14 +2,53 @@
 <html>
 <head>
   <title>Stonks</title>
+  <style>
+    table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 5px;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
   <h1>Stonks List</h1>
   <% stonks.forEach(stock => { %>
     <div>
-        <span><%= stock.name %> (<%= stock.symbol %>)</span>
-        <a href="/stocks/<%= stock._id %>/newfinancials">Add Financials</a>
+      <h2><%= stock.name %> (<%= stock.symbol %>) - Price: <%= stock.price %></h2>
+      <a href="/stocks/<%= stock._id %>/newfinancials">Add Financials</a>
+      <h3>Financial Data:</h3>
+      <% if (stock.financials && stock.financials.length > 0) { %>
+        <table>
+          <tr>
+            <th>Year</th>
+            <th>Receita Líquida</th>
+            <th>Receita Bruta</th>
+            <th>Profit</th>
+            <th>Patrimônio Líquido</th>
+            <th>Ativo</th>
+            <th>Ações ON</th>
+            <th>Ações PN</th>
+          </tr>
+          <% stock.financials.forEach(financial => { %>
+            <tr>
+              <td><%= financial.year %></td>
+              <td><%= financial.receitaLiquida %></td>
+              <td><%= financial.receitaBruta %></td>
+              <td><%= financial.profit %></td>
+              <td><%= financial.patrimonioLiquido %></td>
+              <td><%= financial.ativo %></td>
+              <td><%= financial.acoesON %></td>
+              <td><%= financial.acoesPN %></td>
+            </tr>
+          <% }); %>
+        </table>
+      <% } else { %>
+        <p>No financial data available.</p>
+      <% } %>
     </div>
-<% }); %>
+  <% }); %>
 </body>
 </html>

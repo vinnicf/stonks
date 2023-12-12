@@ -47,7 +47,7 @@ router.get('/stocks/:stockId/newfinancials', async (req, res) => {
 });
 
 
-router.post('/stocks/addFinancials', (req, res) => {
+router.post('/stocks/:stockId/addFinancials', (req, res) => {
     const stockId = req.params.stockId;
     const financialData = req.body;
 

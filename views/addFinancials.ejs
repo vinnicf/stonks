@@ -10,7 +10,7 @@
 <body>
     <h1>Adicionar Financials</h1>
 
-    <form action="/stocks/:stockId/addFinancials" method="POST">
+    <form action="/stocks/<%= stock._id %>/addFinancials" method="POST">
         <label for="year">Year:</label>
         <input type="number" id="year" name="year" required><br><br>
 

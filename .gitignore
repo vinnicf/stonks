@@ -1,0 +1,32 @@
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional nodemon log file
+nodemon.log
+
+# Optional nyc test coverage
+coverage
+
+# production
+/build
+
+# Misc
+*.log
+*.pid
+*.pid.lock
+pids
+*.seed
+*.pid.lock

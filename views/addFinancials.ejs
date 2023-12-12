@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Stock</title>
+</head>
+
+<body>
+    <h1>Adicionar Financials</h1>
+
+    <form action="/stocks/:stockId/addFinancials" method="POST">
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" required><br><br>
+
+        <label for="receitaLiquida">Receita Líquida:</label>
+        <input type="number" id="receitaLiquida" name="receitaLiquida" required><br><br>
+
+        <label for="receitaBruta">Receita Bruta:</label>
+        <input type="number" id="receitaBruta" name="receitaBruta" required><br><br>
+
+        <label for="profit">Profit:</label>
+        <input type="number" id="profit" name="profit" required><br><br>
+
+        <label for="patrimonioLiquido">Patrimônio Líquido:</label>
+        <input type="number" id="patrimonioLiquido" name="patrimonioLiquido" required><br><br>
+    
+        <label for="ativo">Ativo:</label>
+        <input type="number" id="ativo" name="ativo" required><br><br>
+    
+        <label for="acoesON">Ações ON:</label>
+        <input type="number" id="acoesON" name="acoesON" required><br><br>
+    
+        <label for="acoesPN">Ações PN:</label>
+        <input type="number" id="acoesPN" name="acoesPN" required><br><br>
+    
+
+        <input type="submit" value="Add Financials">
+    </form>
+</body>
+
+</html>

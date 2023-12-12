@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stonks</title>
+</head>
+<body>
+  <h1>Stonks List</h1>
+  <% stonks.forEach(stock => { %>
+    <div>
+        <span><%= stock.name %> (<%= stock.symbol %>)</span>
+        <a href="/stocks/<%= stock._id %>/newfinancials">Add Financials</a>
+    </div>
+<% }); %>
+</body>
+</html>

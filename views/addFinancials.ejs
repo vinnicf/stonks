@@ -8,35 +8,129 @@
 </head>
 
 <body>
+
+    <style>
+     form {
+        margin: 0 auto;
+        width: 300px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+    
+      input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    
+      input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+    
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+    
+      th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+      }
+    
+      th {
+        background-color: #f2f2f2;
+      }
+      </style>
+
+
     <h1>Adicionar Financials</h1>
 
     <form action="/stocks/<%= stock._id %>/addFinancials" method="POST">
         <label for="year">Year:</label>
         <input type="number" id="year" name="year" required><br><br>
 
-        <label for="receitaLiquida">Receita Líquida:</label>
-        <input type="number" id="receitaLiquida" name="receitaLiquida" required><br><br>
-
+        
         <label for="receitaBruta">Receita Bruta:</label>
-        <input type="number" id="receitaBruta" name="receitaBruta" required><br><br>
+        <input type="text" class="financial-input" id="receitaBruta" name="receitaBruta" required><br><br>
 
-        <label for="profit">Profit:</label>
-        <input type="number" id="profit" name="profit" required><br><br>
+
+        <label for="receitaLiquida">Receita Líquida:</label>
+        <input type="text" class="financial-input" id="receitaLiquida" name="receitaLiquida" required><br><br>
+
+        <label for="profit">Lucro Líquido:</label>
+        <input type="number"  class="financial-input" id="profit" name="profit" required><br><br>
 
         <label for="patrimonioLiquido">Patrimônio Líquido:</label>
-        <input type="number" id="patrimonioLiquido" name="patrimonioLiquido" required><br><br>
+        <input type="text" class="financial-input" id="patrimonioLiquido" name="patrimonioLiquido" required><br><br>
     
         <label for="ativo">Ativo:</label>
-        <input type="number" id="ativo" name="ativo" required><br><br>
+        <input type="text" class="financial-input" id="ativo" name="ativo" required><br><br>
     
         <label for="acoesON">Ações ON:</label>
-        <input type="number" id="acoesON" name="acoesON" required><br><br>
+        <input type="text" id="acoesON" name="acoesON" required><br><br>
     
         <label for="acoesPN">Ações PN:</label>
-        <input type="number" id="acoesPN" name="acoesPN" required><br><br>
+        <input type="text" id="acoesPN" name="acoesPN" required><br><br>
     
         <input type="submit" value="Add Financials">
     </form>
+
+    <script>
+        function formatNumber(value) {
+          // Remove all non-digits
+          value = value.replace(/\D/g, '');
+      
+          // Format the number with thousand separators
+          return value.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+      
+        document.querySelectorAll('.financial-input').forEach(input => {
+          input.addEventListener('input', function(e) {
+            // Format the value
+            this.value = formatNumber(this.value);
+          });
+        });
+      </script>
+      
+      <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+          document.querySelectorAll('.financial-input').forEach(input => {
+            // Convert formatted value back to a number
+            input.value = input.value.replace(/\./g, '');
+          });
+        });
+      </script>
+      
+      
+
+
 </body>
 
 </html>

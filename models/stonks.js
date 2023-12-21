@@ -39,7 +39,6 @@ const financialYearSchema = new mongoose.Schema({
 });
 
 
-
 const stonkSchema = new mongoose.Schema({
     name: {
       type: String,

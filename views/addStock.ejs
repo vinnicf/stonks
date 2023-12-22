@@ -1,26 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
+<% let title='Add New Stock' ; %>
+    <%- include('partials/base', { title: title, content: ` <style>
+        form {
+        max-width: 400px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Stock</title>
-</head>
+        label {
+        display: block;
+        margin-bottom: 10px;
+        }
 
-<body>
-    <h1>Adicionar Nova Ação</h1>
-    <form action="/stocks/add" method="POST">
-        <label for="name">Nome da empresa</label>
-        <input type="text" id="name" name="name" required><br><br>
+        input[type="text"],
+        input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        }
 
-        <label for="symbol">Símbolo</label>
-        <input type="text" id="symbol" name="symbol" required><br><br>
+        input[type="submit"] {
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        }
 
-        <label for="price">Preço</label>
-        <input type="number" id="price" name="price" step="0.01" required><br><br>
+        input[type="submit"]:hover {
+        background-color: #0056b3;
+        }
+        </style>
 
-        <input type="submit" value="Add Stock">
-    </form>
-</body>
+        <h1>Adicionar Nova Ação</h1>
+        <form action="/stocks/add" method="POST">
+            <label for="name">Nome da empresa</label>
+            <input type="text" id="name" name="name" required><br><br>
 
-</html>
+            <label for="symbol">Símbolo</label>
+            <input type="text" id="symbol" name="symbol" required><br><br>
+
+            <label for="price">Preço</label>
+            <input type="number" id="price" name="price" step="0.01" required><br><br>
+
+            <input type="submit" value="Add Stock">
+        </form>
+        `
+        }) %>

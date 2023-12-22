@@ -11,6 +11,9 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use('/', stocksRoute);
 
+// Serve static files from the "public" directory
+app.use(express.static('public'));
+
 
 
 

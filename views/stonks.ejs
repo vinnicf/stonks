@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Stonks</title>
   <style>
-    table, th, td {
+    table,
+    th,
+    td {
       border: 1px solid black;
       border-collapse: collapse;
     }
-    th, td {
+
+    th,
+    td {
       padding: 5px;
       text-align: left;
     }
   </style>
 </head>
+
 <body>
   <h1>Stonks List</h1>
-  <% stonks.forEach(stock => { %>
+  <% stonks.forEach(stock=> { %>
     <div>
-      <h2><%= stock.name %> (<%= stock.symbol %>) - Price: <%= stock.price %></h2>
+      <h2>
+        <%= stock.name %> (<%= stock.symbol %>) - Price: <%= stock.price %>
+      </h2>
       <a href="/stocks/<%= stock._id %>/newfinancials">Add Financials</a>
       <h3>Dados Financeiros</h3>
-      <% if (stock.financials && stock.financials.length > 0) { %>
+      <% if (stock.financials && stock.financials.length> 0) { %>
         <table>
           <tr>
             <th>Year</th>
@@ -32,26 +40,46 @@
             <th>Ações ON</th>
             <th>Ações PN</th>
           </tr>
-          <% stock.financials.forEach(financial => { %>
+          <% stock.financials.forEach(financial=> { %>
             <tr>
-              <td><%= financial.year %></td>
-              <td><%= new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(financial.receitaBruta) %></td>
+              <td>
+                <%= financial.year %>
+              </td>
+              <td>
+                <%= new Intl.NumberFormat('pt-BR', { style: 'currency' , currency: 'BRL'
+                  }).format(financial.receitaBruta) %>
+              </td>
 
-              <td><%= new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(financial.receitaLiquida) %></td>
+              <td>
+                <%= new Intl.NumberFormat('pt-BR', { style: 'currency' , currency: 'BRL'
+                  }).format(financial.receitaLiquida) %>
+              </td>
 
-              <td><%= new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(financial.profit) %></td>
-              <td><%= new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(financial.patrimonioLiquido) %></td>
+              <td>
+                <%= new Intl.NumberFormat('pt-BR', { style: 'currency' , currency: 'BRL' }).format(financial.profit) %>
+              </td>
+              <td>
+                <%= new Intl.NumberFormat('pt-BR', { style: 'currency' , currency: 'BRL'
+                  }).format(financial.patrimonioLiquido) %>
+              </td>
 
-              <td><%= financial.ativo %></td>
-              <td><%= financial.acoesON %></td>
-              <td><%= financial.acoesPN %></td>
+              <td>
+                <%= financial.ativo %>
+              </td>
+              <td>
+                <%= financial.acoesON %>
+              </td>
+              <td>
+                <%= financial.acoesPN %>
+              </td>
             </tr>
-          <% }); %>
+            <% }); %>
         </table>
-      <% } else { %>
-        <p>No financial data available.</p>
-      <% } %>
+        <% } else { %>
+          <p>No financial data available.</p>
+          <% } %>
     </div>
-  <% }); %>
+    <% }); %>
 </body>
+
 </html>

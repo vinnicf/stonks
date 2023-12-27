@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const app = express();
 const port = 3000;
 
@@ -9,12 +10,18 @@ const stocksRoute = require('./routes/stocks');
 
 app.set('view engine', 'ejs');
 app.set('views', './views');
+
+
+
+// Enable CORS for requests from React
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
+
 app.use('/', stocksRoute);
 
 // Serve static files from the "public" directory
 app.use(express.static('public'));
-
-
 
 
 mongoose.connect(mongoDBUri);

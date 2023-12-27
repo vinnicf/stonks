@@ -9,9 +9,9 @@ router.use(express.urlencoded({ extended: true }));
 router.get('/stocks', (req, res) => {
     Stonk.find()
         .then(stonks => {
-            res.render('stonks', { stonks });
+            res.json(stonks);
         })
-        .catch(err => res.status(500).send(err.message));
+        .catch(err => res.status(500).json({ error: err.message }));
 });
 
 

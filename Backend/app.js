@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,7 +6,7 @@ const app = express();
 const port = 3000;
 
 
-const mongoDBUri = "mongodb+srv://vini:vmhGclrkIbiMxrfu@stocks.twgvyjc.mongodb.net/Stonks?retryWrites=true&w=majority";
+const mongoDBUri = process.env.MONGODB_URI;
 const stocksRoute = require('./routes/stocks');
 
 app.set('view engine', 'ejs');

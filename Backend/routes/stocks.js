@@ -40,6 +40,27 @@ router.patch('/stocks/:id/financials', async (req, res) => {
 });
 
 
+router.delete('/stocks/:stockId/financials/:financialId', async (req, res) => {
+    try {
+        const { stockId, financialId } = req.params;
+
+        // Find the stock and pull the financial entry from the financials array
+        const result = await Stonk.findByIdAndUpdate(stockId, {
+            $pull: { financials: { _id: financialId } }
+        }, { new: true });
+
+        if (!result) {
+            return res.status(404).send('Stock or financial entry not found');
+        }
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
 
 router.get('/stocks/new', (req, res) => {
     res.render('addStock');
@@ -59,6 +80,8 @@ router.post('/stocks/add', (req, res) => {
         .then(() => res.redirect('/stocks'))
         .catch(err => res.status(500).send(err.message));
 });
+
+
 
 router.get('/stocks/:stockId/newfinancials', async (req, res) => {
     try {

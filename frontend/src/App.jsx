@@ -2,7 +2,7 @@ import './App.css'
 import './styles/stonks.css'
 import React, { useEffect, useState } from 'react';
 import fetchStocks from './api/apis';
-import { updateFinancialData } from './api/apis';
+import { updateFinancialData, deleteFinancialData } from './api/apis';
 
 function App() {
   const [stocks, setStocks] = useState([]);
@@ -38,12 +38,33 @@ function App() {
     console.log('Submitting financial data:', financialData);
 
 
+
     try {
       const updatedStock = await updateFinancialData(stockId, financialData);
       setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
       setOpenFormStockId(null);
     } catch (error) {
       console.error('Failed to add financial data:', error);
+    }
+  };
+
+  const handleDeleteFinancial = async (stockId, financialId) => {
+
+    const userConfirmed = window.confirm("Are you sure you want to delete this financial entry?");
+
+    if (userConfirmed) {
+      try {
+        await deleteFinancialData(stockId, financialId);
+        setStocks(stocks.map(stock => {
+          if (stock._id === stockId) {
+            const updatedFinancials = stock.financials.filter(financial => financial._id !== financialId);
+            return { ...stock, financials: updatedFinancials };
+          }
+          return stock;
+        }));
+      } catch (error) {
+        console.error('Failed to delete financial data:', error);
+      }
     }
   };
 
@@ -66,6 +87,7 @@ function App() {
                       <th>Faturamento</th>
                       <th>Lucro</th>
                       <th>Patrimônio Liq.</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -75,6 +97,9 @@ function App() {
                         <td>${financial.receitaLiquida.toLocaleString()}</td>
                         <td>${financial.profit.toLocaleString()}</td>
                         <td>${financial.patrimonioLiquido.toLocaleString()}</td>
+                        <td>
+                          <button onClick={() => handleDeleteFinancial(stock._id, financial._id)}>X</button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -85,35 +110,36 @@ function App() {
                 {openFormStockId === stock._id && (
                   <form onSubmit={(e) => handleAddFinancial(e, stock._id)} className="financial-form">
                     <div className="form-field">
-                      <label htmlFor="year">Year</label>
+                      <label htmlFor="year">Ano</label>
                       <input type="number" placeholder="Year" name="year" />
                     </div>
                     <div className="form-field">
-                      <label htmlFor="receitaLiquida">Net Revenue</label>
-                      <input type="number" placeholder="Net Revenue" name="receitaLiquida" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="receitaBruta">Gross Revenue</label>
+                      <label htmlFor="receitaBruta">Receita Bruta</label>
                       <input type="number" placeholder="Gross Revenue" name="receitaBruta" />
                     </div>
                     <div className="form-field">
-                      <label htmlFor="profit">Profit</label>
+                      <label htmlFor="receitaLiquida">Receita Liq.</label>
+                      <input type="number" placeholder="Net Revenue" name="receitaLiquida" />
+                    </div>
+
+                    <div className="form-field">
+                      <label htmlFor="profit">Lucro</label>
                       <input type="number" placeholder="Profit" name="profit" />
                     </div>
                     <div className="form-field">
-                      <label htmlFor="patrimonioLiquido">Net Equity</label>
+                      <label htmlFor="patrimonioLiquido">Patrimônio Líquido</label>
                       <input type="number" placeholder="Net Equity" name="patrimonioLiquido" />
                     </div>
                     <div className="form-field">
-                      <label htmlFor="ativo">Assets</label>
+                      <label htmlFor="ativo">Ativo</label>
                       <input type="number" placeholder="Assets" name="ativo" />
                     </div>
                     <div className="form-field">
-                      <label htmlFor="acoesON">Common Shares</label>
+                      <label htmlFor="acoesON">Ações ON</label>
                       <input type="number" placeholder="Common Shares" name="acoesON" />
                     </div>
                     <div className="form-field">
-                      <label htmlFor="acoesPN">Preferred Shares</label>
+                      <label htmlFor="acoesPN">Ações PN</label>
                       <input type="number" placeholder="Preferred Shares" name="acoesPN" />
                     </div>
                     <button type="submit" className="submit-button">Enviar</button>

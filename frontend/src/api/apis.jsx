@@ -25,8 +25,17 @@ const updateFinancialData = async (stockId, financialData) => {
     }
 };
 
+const deleteFinancialData = async (stockId, financialId) => {
+    try {
+        await axios.delete(`http://localhost:3000/stocks/${stockId}/financials/${financialId}`);
+        // Update your state or UI here after successful deletion
+    } catch (error) {
+        console.error('Error deleting financial data:', error);
+        // Handle errors, maybe show a message to the user
+    }
+};
 
 
 
 export default fetchStocks;
-export { updateFinancialData };
+export { updateFinancialData, deleteFinancialData };

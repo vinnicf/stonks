@@ -2,6 +2,7 @@ import './App.css'
 import './styles/stonks.css'
 import React, { useEffect, useState } from 'react';
 import fetchStocks from './api/apis';
+import { updateFinancialData } from './api/apis';
 
 function App() {
   const [stocks, setStocks] = useState([]);
@@ -21,16 +22,29 @@ function App() {
   }, []);
 
   // Function to handle form submit
-  const handleAddFinancial = (e, stockId) => {
+  const handleAddFinancial = async (e, stockId) => {
     e.preventDefault();
-    // Gather your form data here
-    // ...
+    const financialData = {
+      year: e.target.year.value,
+      receitaLiquida: e.target.receitaLiquida.value,
+      receitaBruta: e.target.receitaBruta.value,
+      profit: e.target.profit.value,
+      patrimonioLiquido: e.target.patrimonioLiquido.value,
+      ativo: e.target.ativo.value,
+      acoesON: e.target.acoesON.value,
+      acoesPN: e.target.acoesPN.value,
+    };
 
-    // Call your API to add financial data
-    // ...
+    console.log('Submitting financial data:', financialData);
 
-    // Close the form
-    setOpenFormStockId(null);
+
+    try {
+      const updatedStock = await updateFinancialData(stockId, financialData);
+      setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
+      setOpenFormStockId(null);
+    } catch (error) {
+      console.error('Failed to add financial data:', error);
+    }
   };
 
   return (
@@ -41,16 +55,17 @@ function App() {
         stocks.map((stock) => (
           <div key={stock._id} className="stock">
             <h3 className="stock-name">{stock.name} ({stock.symbol})</h3>
-            <p className="stock-price">Price: ${stock.price.toLocaleString()}</p>
+            <p className="stock-price">Preço: R${stock.price.toLocaleString()}</p>
             {stock.financials.length > 0 && (
               <div className="financials">
                 <h4>Financials</h4>
-                <table>
+                <table className='width-table'>
                   <thead>
                     <tr>
-                      <th>Year</th>
-                      <th>Revenue</th>
-                      <th>Profit</th>
+                      <th>Ano</th>
+                      <th>Faturamento</th>
+                      <th>Lucro</th>
+                      <th>Patrimônio Liq.</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -59,6 +74,7 @@ function App() {
                         <td>{financial.year}</td>
                         <td>${financial.receitaLiquida.toLocaleString()}</td>
                         <td>${financial.profit.toLocaleString()}</td>
+                        <td>${financial.patrimonioLiquido.toLocaleString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -67,12 +83,40 @@ function App() {
                   Add Financial Data
                 </button>
                 {openFormStockId === stock._id && (
-                  <form onSubmit={(e) => handleAddFinancial(e, stock._id)}>
-                    <input type="number" placeholder="Year" name="year" />
-                    <input type="number" placeholder="Revenue" name="receitaLiquida" />
-                    <input type="number" placeholder="Profit" name="profit" />
-                    {/* Add other fields as necessary */}
-                    <button type="submit">Enviar</button>
+                  <form onSubmit={(e) => handleAddFinancial(e, stock._id)} className="financial-form">
+                    <div className="form-field">
+                      <label htmlFor="year">Year</label>
+                      <input type="number" placeholder="Year" name="year" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="receitaLiquida">Net Revenue</label>
+                      <input type="number" placeholder="Net Revenue" name="receitaLiquida" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="receitaBruta">Gross Revenue</label>
+                      <input type="number" placeholder="Gross Revenue" name="receitaBruta" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="profit">Profit</label>
+                      <input type="number" placeholder="Profit" name="profit" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="patrimonioLiquido">Net Equity</label>
+                      <input type="number" placeholder="Net Equity" name="patrimonioLiquido" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="ativo">Assets</label>
+                      <input type="number" placeholder="Assets" name="ativo" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="acoesON">Common Shares</label>
+                      <input type="number" placeholder="Common Shares" name="acoesON" />
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="acoesPN">Preferred Shares</label>
+                      <input type="number" placeholder="Preferred Shares" name="acoesPN" />
+                    </div>
+                    <button type="submit" className="submit-button">Enviar</button>
                   </form>
                 )}
               </div>

@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+
 
 const fetchStocks = async () => {
     try {
@@ -11,4 +14,19 @@ const fetchStocks = async () => {
     }
 };
 
+// Function to send PATCH request
+const updateFinancialData = async (stockId, financialData) => {
+    try {
+        const response = await axios.patch(`http://localhost:3000/stocks/${stockId}/financials`, financialData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating financial data:', error);
+        throw error;
+    }
+};
+
+
+
+
 export default fetchStocks;
+export { updateFinancialData };

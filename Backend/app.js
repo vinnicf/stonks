@@ -12,7 +12,7 @@ const stocksRoute = require('./routes/stocks');
 app.set('view engine', 'ejs');
 app.set('views', './views');
 
-
+app.use(express.json());
 
 // Enable CORS for requests from React
 app.use(cors({
@@ -20,6 +20,8 @@ app.use(cors({
 }));
 
 app.use('/', stocksRoute);
+
+app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the "public" directory
 app.use(express.static('public'));

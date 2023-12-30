@@ -39,6 +39,26 @@ router.patch('/stocks/:id/financials', async (req, res) => {
     }
 });
 
+router.patch('/stocks/:id', async (req, res) => {
+    try {
+        const stockId = req.params.id;
+        const { price } = req.body; // Extract the new price from the request body
+
+        // Find the stock and update its price
+        const stock = await Stonk.findById(stockId);
+        if (!stock) {
+            return res.status(404).send('Stock not found');
+        }
+
+        stock.price = price;
+        await stock.save();
+
+        res.status(200).json(stock);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 router.delete('/stocks/:stockId/financials/:financialId', async (req, res) => {
     try {

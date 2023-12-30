@@ -14,6 +14,16 @@ const fetchStocks = async () => {
     }
 };
 
+const updateStockPrice = async (stockId, newPrice) => {
+    try {
+        const response = await axios.patch(`http://localhost:3000/stocks/${stockId}/`, { price: newPrice });
+        return response.data;
+    } catch (error) {
+        console.error('Error updating stock price:', error);
+        throw error;
+    }
+};
+
 // Function to send PATCH request
 const updateFinancialData = async (stockId, financialData) => {
     try {
@@ -38,4 +48,4 @@ const deleteFinancialData = async (stockId, financialId) => {
 
 
 export default fetchStocks;
-export { updateFinancialData, deleteFinancialData };
+export { updateFinancialData, deleteFinancialData, updateStockPrice };

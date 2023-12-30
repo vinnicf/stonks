@@ -2,7 +2,8 @@ import './App.css'
 import './styles/stonks.css'
 import React, { useEffect, useState } from 'react';
 import fetchStocks from './api/apis';
-import { updateFinancialData, deleteFinancialData } from './api/apis';
+import FinancialForm from './components/financials-form';
+import { updateFinancialData, deleteFinancialData, updateStockPrice } from './api/apis';
 
 function App() {
   const [stocks, setStocks] = useState([]);
@@ -48,6 +49,17 @@ function App() {
     }
   };
 
+
+
+  const handlePriceClick = async (stockId, currentPrice) => {
+    const newPrice = prompt("Enter new price:", currentPrice);
+    if (newPrice && !isNaN(newPrice)) {
+      const updatedStock = await updateStockPrice(stockId, newPrice);
+      setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
+    }
+  };
+
+
   const handleDeleteFinancial = async (stockId, financialId) => {
 
     const userConfirmed = window.confirm("Are you sure you want to delete this financial entry?");
@@ -76,7 +88,8 @@ function App() {
         stocks.map((stock) => (
           <div key={stock._id} className="stock">
             <h3 className="stock-name">{stock.name} ({stock.symbol})</h3>
-            <p className="stock-price">Preço: R${stock.price.toLocaleString()}</p>
+            <p className="stock-price" onClick={() => handlePriceClick(stock._id, stock.price)}>Preço: R${stock.price.toLocaleString()}</p>
+            {/* Financials Table */}
             {stock.financials.length > 0 && (
               <div className="financials">
                 <h4>Financials</h4>
@@ -104,48 +117,15 @@ function App() {
                     ))}
                   </tbody>
                 </table>
-                <button onClick={() => setOpenFormStockId(stock._id)}>
-                  Add Financial Data
-                </button>
-                {openFormStockId === stock._id && (
-                  <form onSubmit={(e) => handleAddFinancial(e, stock._id)} className="financial-form">
-                    <div className="form-field">
-                      <label htmlFor="year">Ano</label>
-                      <input type="number" placeholder="Year" name="year" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="receitaBruta">Receita Bruta</label>
-                      <input type="number" placeholder="Gross Revenue" name="receitaBruta" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="receitaLiquida">Receita Liq.</label>
-                      <input type="number" placeholder="Net Revenue" name="receitaLiquida" />
-                    </div>
 
-                    <div className="form-field">
-                      <label htmlFor="profit">Lucro</label>
-                      <input type="number" placeholder="Profit" name="profit" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="patrimonioLiquido">Patrimônio Líquido</label>
-                      <input type="number" placeholder="Net Equity" name="patrimonioLiquido" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="ativo">Ativo</label>
-                      <input type="number" placeholder="Assets" name="ativo" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="acoesON">Ações ON</label>
-                      <input type="number" placeholder="Common Shares" name="acoesON" />
-                    </div>
-                    <div className="form-field">
-                      <label htmlFor="acoesPN">Ações PN</label>
-                      <input type="number" placeholder="Preferred Shares" name="acoesPN" />
-                    </div>
-                    <button type="submit" className="submit-button">Enviar</button>
-                  </form>
-                )}
               </div>
+            )}
+            <button onClick={() => setOpenFormStockId(stock._id)}>
+              Add Financial Data
+            </button>
+
+            {openFormStockId === stock._id && (
+              <FinancialForm stockId={stock._id} handleAddFinancial={handleAddFinancial} />
             )}
           </div>
         ))

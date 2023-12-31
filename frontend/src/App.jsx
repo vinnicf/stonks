@@ -23,23 +23,7 @@ function App() {
   }, []);
 
   // Function to handle form submit
-  const handleAddFinancial = async (e, stockId) => {
-    e.preventDefault();
-    const financialData = {
-      year: e.target.year.value,
-      receitaLiquida: e.target.receitaLiquida.value,
-      receitaBruta: e.target.receitaBruta.value,
-      profit: e.target.profit.value,
-      patrimonioLiquido: e.target.patrimonioLiquido.value,
-      ativo: e.target.ativo.value,
-      acoesON: e.target.acoesON.value,
-      acoesPN: e.target.acoesPN.value,
-    };
-
-    console.log('Submitting financial data:', financialData);
-
-
-
+  const handleFinancialDataSubmit = async (financialData, stockId) => {
     try {
       const updatedStock = await updateFinancialData(stockId, financialData);
       setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
@@ -125,7 +109,7 @@ function App() {
             </button>
 
             {openFormStockId === stock._id && (
-              <FinancialForm stockId={stock._id} handleAddFinancial={handleAddFinancial} />
+              <FinancialForm stockId={stock._id} onFinancialSubmit={handleFinancialDataSubmit} />
             )}
           </div>
         ))

@@ -71,8 +71,8 @@ function App() {
       ) : (
         stocks.map((stock) => (
           <div key={stock._id} className="stock">
-            <h3 className="stock-name">{stock.name} ({stock.symbol})</h3>
-            <p className="stock-price" onClick={() => handlePriceClick(stock._id, stock.price)}>Preço: R${stock.price.toLocaleString()}</p>
+            <h3 className="stock-name">{stock.name} ({stock.ticker})</h3>
+            <p className="stock-price" onClick={() => handlePriceClick(stock._id, stock.price)}>Preço: R${(stock.price/100).toLocaleString()}</p>
             {/* Financials Table */}
             {stock.financials.length > 0 && (
               <div className="financials">
@@ -91,8 +91,8 @@ function App() {
                     {stock.financials.map((financial) => (
                       <tr key={financial._id} className="financial">
                         <td>{financial.year}</td>
-                        <td>${financial.receitaLiquida.toLocaleString()}</td>
-                        <td>${financial.profit.toLocaleString()}</td>
+                        <td>${financial.receita.toLocaleString()}</td>
+                        <td>${financial.lucro.toLocaleString()}</td>
                         <td>${financial.patrimonioLiquido.toLocaleString()}</td>
                         <td>
                           <button onClick={() => handleDeleteFinancial(stock._id, financial._id)}>X</button>

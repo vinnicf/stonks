@@ -7,15 +7,11 @@ const financialYearSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  receitaLiquida: {
+  receita: {
     type: Number,
     required: true
   },
-  receitaBruta: {
-    type: Number,
-    required: true
-  },
-  profit: {
+  lucro: {
     type: Number,
     required: true
   },
@@ -27,15 +23,6 @@ const financialYearSchema = new mongoose.Schema({
     type: Number,
     required: true
   },
-  acoesON: {
-    type: Number,
-    required: true
-  },
-  acoesPN: {
-    type: Number,
-    required: true
-  },
-  // Add other financial fields as needed
 });
 
 
@@ -44,13 +31,17 @@ const stonkSchema = new mongoose.Schema({
       type: String,
       required: true
     },
-    symbol: {
+    ticker: {
       type: String,
       required: true
     },
     price: {
       type: Number,
       required: true
+    },
+    acoesTotais: {
+      type: Number,
+      required: false
     },
 
     financials: [financialYearSchema]

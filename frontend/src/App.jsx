@@ -10,6 +10,7 @@ function App() {
   const [openFormStockId, setOpenFormStockId] = useState(null);
   const [selectedStock, setSelectedStock] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
   useEffect(() => {
     const getStocks = async () => {
@@ -24,24 +25,36 @@ function App() {
     getStocks();
   }, []);
 
-  // Function to handle form submit
-  const handleFinancialDataSubmit = async (financialData, stockId) => {
-    try {
-      const updatedStock = await updateFinancialData(stockId, financialData);
-      setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
-      setOpenFormStockId(null);
-    } catch (error) {
-      console.error('Failed to add financial data:', error);
-    }
+
+  const sortStocks = (key) => {
+    // Toggle sort direction or set to 'ascending' if a new key is selected
+    const direction = sortConfig.key === key && sortConfig.direction === 'ascending' ? 'descending' : 'ascending';
+
+    const sortedStocks = [...stocks].sort((a, b) => {
+      if (a[key] < b[key]) {
+        return direction === 'ascending' ? -1 : 1;
+      }
+      if (a[key] > b[key]) {
+        return direction === 'ascending' ? 1 : -1;
+      }
+      return 0;
+    });
+
+    setStocks(sortedStocks);
+    setSortConfig({ key, direction });
   };
 
-  const handlePriceClick = async (stockId, currentPrice) => {
-    const newPrice = prompt("Enter new price:", currentPrice);
-    if (newPrice && !isNaN(newPrice)) {
-      const updatedStock = await updateStockPrice(stockId, newPrice);
-      setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
+
+  // Function to render the sort indicator
+  const renderSortArrow = (key) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'ascending' ? ' 🔼' : ' 🔽';
     }
+    return '';
   };
+
+
+
 
   const handleDeleteFinancial = async (stockId, financialId) => {
 
@@ -81,13 +94,13 @@ function App() {
         <table className="stock-table">
           <thead>
             <tr>
-              <th>Ticker</th>
-              <th>Nome</th>
-              <th>Preço</th>
-              <th>P/L 3 anos</th>
-              <th>ROE 2 anos</th>
+              <th onClick={() => sortStocks('ticker')}>Ticker{renderSortArrow('ticker')}</th>
+              <th onClick={() => sortStocks('name')}>Nome{renderSortArrow('name')}</th>
+              <th onClick={() => sortStocks('price')}>Preço{renderSortArrow('price')}</th>
+              <th onClick={() => sortStocks('peRatio')}>P/L 3 anos{renderSortArrow('peRatio')}</th>
+              <th onClick={() => sortStocks('roe2')}>ROE 2 anos{renderSortArrow('roe2')}</th>
 
-              {/* Add other headers as needed */}
+
             </tr>
           </thead>
           <tbody>
@@ -97,8 +110,8 @@ function App() {
                 <td>{stock.name} </td>
                 <td>R${(stock.price / 100).toLocaleString()}</td>
                 <td>{stock.peRatio}</td>
-                <td>{stock.roe2}</td>
-                {/* Add other stock data as needed */}
+                <td>{(stock.roe2 * 100).toLocaleString()} %</td>
+
               </tr>
             ))}
           </tbody>

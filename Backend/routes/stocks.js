@@ -2,6 +2,7 @@
 const express = require('express');
 const Stonk = require('../models/stonks')
 const router = express.Router();
+const { calculateThreeYearPE, calculateTwoYearROE } = require('./indicators'); // Adjust the path if indicators.js is in a different folder
 
 router.use(express.urlencoded({ extended: true }));
 
@@ -9,7 +10,19 @@ router.use(express.urlencoded({ extended: true }));
 router.get('/stocks', (req, res) => {
     Stonk.find()
         .then(stonks => {
-            res.json(stonks);
+            const updatedStonks = stonks.map(stonk => {
+                const peRatio = calculateThreeYearPE(stonk);
+                const roe2 = calculateTwoYearROE(stonk);
+
+                // Convert the Mongoose document to a plain JavaScript object and attach the P/E ratio
+                const stonkObject = stonk.toObject();
+                stonkObject.peRatio = peRatio;
+                stonkObject.roe2 = roe2;
+
+                return stonkObject;
+            });
+
+            res.json(updatedStonks);
         })
         .catch(err => res.status(500).json({ error: err.message }));
 });

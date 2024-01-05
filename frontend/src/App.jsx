@@ -8,6 +8,8 @@ import { updateFinancialData, deleteFinancialData, updateStockPrice } from './ap
 function App() {
   const [stocks, setStocks] = useState([]);
   const [openFormStockId, setOpenFormStockId] = useState(null);
+  const [selectedStock, setSelectedStock] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const getStocks = async () => {
@@ -33,8 +35,6 @@ function App() {
     }
   };
 
-
-
   const handlePriceClick = async (stockId, currentPrice) => {
     const newPrice = prompt("Enter new price:", currentPrice);
     if (newPrice && !isNaN(newPrice)) {
@@ -42,7 +42,6 @@ function App() {
       setStocks(stocks.map(stock => stock._id === stockId ? updatedStock : stock));
     }
   };
-
 
   const handleDeleteFinancial = async (stockId, financialId) => {
 
@@ -64,55 +63,53 @@ function App() {
     }
   };
 
+  const handleStockClick = (stock) => {
+    setSelectedStock(stock);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedStock(null);
+  };
+
   return (
     <div className="stock-container">
       {stocks.length === 0 ? (
         <p className="no-stocks">No stocks available</p>
       ) : (
-        stocks.map((stock) => (
-          <div key={stock._id} className="stock">
-            <h3 className="stock-name">{stock.name} ({stock.ticker})</h3>
-            <p className="stock-price" onClick={() => handlePriceClick(stock._id, stock.price)}>Preço: R${(stock.price/100).toLocaleString()}</p>
-            {/* Financials Table */}
-            {stock.financials.length > 0 && (
-              <div className="financials">
-                <h4>Financials</h4>
-                <table className='width-table'>
-                  <thead>
-                    <tr>
-                      <th>Ano</th>
-                      <th>Faturamento</th>
-                      <th>Lucro</th>
-                      <th>Patrimônio Liq.</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {stock.financials.map((financial) => (
-                      <tr key={financial._id} className="financial">
-                        <td>{financial.year}</td>
-                        <td>${financial.receita.toLocaleString()}</td>
-                        <td>${financial.lucro.toLocaleString()}</td>
-                        <td>${financial.patrimonioLiquido.toLocaleString()}</td>
-                        <td>
-                          <button onClick={() => handleDeleteFinancial(stock._id, financial._id)}>X</button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+        <table className="stock-table">
+          <thead>
+            <tr>
+              <th>Ticker</th>
+              <th>Nome</th>
+              <th>Preço</th>
+              <th>P/L 3 anos</th>
+              <th>ROE 2 anos</th>
 
-              </div>
-            )}
-            <button onClick={() => setOpenFormStockId(stock._id)}>
-              Add Financial Data
-            </button>
+              {/* Add other headers as needed */}
+            </tr>
+          </thead>
+          <tbody>
+            {stocks.map((stock) => (
+              <tr key={stock._id} >
+                <td>{stock.ticker}</td>
+                <td>{stock.name} </td>
+                <td>R${(stock.price / 100).toLocaleString()}</td>
+                <td>{stock.peRatio}</td>
+                <td>{stock.roe2}</td>
+                {/* Add other stock data as needed */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
 
-            {openFormStockId === stock._id && (
-              <FinancialForm stockId={stock._id} onFinancialSubmit={handleFinancialDataSubmit} />
-            )}
-          </div>
-        ))
+      {isModalOpen && selectedStock && (
+        <FinancialModal
+          stock={selectedStock}
+          onClose={closeModal}
+        />
       )}
     </div>
   );

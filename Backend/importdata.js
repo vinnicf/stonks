@@ -36,10 +36,10 @@ const transformedData = validCompanies.map(company => {
     return financialYear;
   }) : [];
 
-    // Log if price is missing
-    if (company.preco === undefined) {
-      console.log(`Missing 'price' for company: ${company.Denominacao}`);
-    }
+  // Log if price is missing
+  if (company.preco === undefined) {
+    console.log(`Missing 'price' for company: ${company.Denominacao}`);
+  }
 
   return {
     name: company.Denominacao,
@@ -51,13 +51,22 @@ const transformedData = validCompanies.map(company => {
 });
 
 
-// Insert the data into MongoDB
-Stonk.insertMany(transformedData)
-  .then(() => {
-    console.log('Data added successfully');
+const updateDatabase = async (data) => {
+  try {
+    await Promise.all(data.map(async (company) => {
+      await Stonk.findOneAndUpdate(
+        { ticker: company.ticker }, // Filter condition
+        company, // Update
+        { upsert: true, new: true } // Options: upsert and return new document
+      );
+    }));
+
+    console.log('Data updated successfully');
+  } catch (err) {
+    console.error('Error updating data:', err);
+  } finally {
     mongoose.connection.close();
-  })
-  .catch(err => {
-    console.error('Error adding data:', err);
-    mongoose.connection.close();
-  });
+  }
+};
+
+updateDatabase(transformedData);

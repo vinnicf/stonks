@@ -6,7 +6,7 @@ with open('companies.json', 'r', encoding='utf-8') as file:
     companies = json.load(file)
 
 # Define the years to process
-years = range(2022, 2019, -1)  # From 2021 to 2019
+years = range(2022, 2016, -1) 
 
 
 # Process each year

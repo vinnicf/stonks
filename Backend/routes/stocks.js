@@ -2,7 +2,7 @@
 const express = require('express');
 const Stonk = require('../models/stonks')
 const router = express.Router();
-const { calculateThreeYearPE, calculateTwoYearROE } = require('./indicators'); // Adjust the path if indicators.js is in a different folder
+const { calculateThreeYearPE, calculateTwoYearROE, rankStocksAndCalculateMagicNumber } = require('./indicators'); // Adjust the path if indicators.js is in a different folder
 
 router.use(express.urlencoded({ extended: true }));
 
@@ -21,8 +21,9 @@ router.get('/stocks', (req, res) => {
 
                 return stonkObject;
             });
+            const rankedStonks = rankStocksAndCalculateMagicNumber(updatedStonks);
 
-            res.json(updatedStonks);
+            res.json(rankedStonks);
         })
         .catch(err => res.status(500).json({ error: err.message }));
 });

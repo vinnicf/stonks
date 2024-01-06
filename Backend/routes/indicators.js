@@ -67,7 +67,38 @@ function calculateTwoYearROE(stock) {
 }
 
 
+/**
+ * Ranks stocks based on their P/E ratio and ROE, and calculates a 'magic number'.
+ * @param {Array} stocks - An array of stock objects.
+ * @returns {Array} - The array of stocks with their magic number and updated rankings.
+ */
+function rankStocksAndCalculateMagicNumber(stocks) {
+    const rankByMetric = (key, ascending = true) => {
+        const validStocks = stocks.filter(stock => stock[key] !== null && stock[key] >= 0);
+        return validStocks
+            .sort((a, b) => ascending ? a[key] - b[key] : b[key] - a[key])
+            .reduce((acc, stock, index) => {
+                acc[stock._id] = index + 1; // Rank starts from 1
+                return acc;
+            }, {});
+    };
+
+    const peRanks = rankByMetric('peRatio');
+    const roeRanks = rankByMetric('roe2', false);
+
+    return stocks.map(stock => {
+        const peRank = peRanks[stock._id] || Infinity;
+        const roeRank = roeRanks[stock._id] || Infinity;
+        const magicNumber = peRank + roeRank;
+
+        return { ...stock, magicNumber };
+    }).sort((a, b) => a.magicNumber - b.magicNumber);
+}
+
+
+
 module.exports = {
     calculateThreeYearPE,
-    calculateTwoYearROE
+    calculateTwoYearROE,
+    rankStocksAndCalculateMagicNumber,
 };

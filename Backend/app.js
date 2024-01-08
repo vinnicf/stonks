@@ -15,9 +15,11 @@ app.set('views', './views');
 app.use(express.json());
 
 // Enable CORS for requests from React
-app.use(cors({
-  origin: 'http://localhost:5173'
-}));
+const corsOptions = {
+  origin: ['http://localhost:5173', 'https://stonks-frontend.onrender.com']
+};
+
+app.use(cors(corsOptions));
 
 app.use('/', stocksRoute);
 

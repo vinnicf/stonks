@@ -87,44 +87,49 @@ function App() {
   };
 
   return (
-    <div className="stock-container">
-      {stocks.length === 0 ? (
-        <p className="no-stocks">No stocks available</p>
-      ) : (
-        <table className="stock-table">
-          <thead>
-            <tr>
-              <th onClick={() => sortStocks('ticker')}>Ticker{renderSortArrow('ticker')}</th>
-              <th onClick={() => sortStocks('name')}>Nome{renderSortArrow('name')}</th>
-              <th onClick={() => sortStocks('price')}>Preço{renderSortArrow('price')}</th>
-              <th onClick={() => sortStocks('peRatio')}>P/L 3 anos{renderSortArrow('peRatio')}</th>
-              <th onClick={() => sortStocks('roe2')}>ROE 2 anos{renderSortArrow('roe2')}</th>
+    <>
+      <div className="top-title"><h2>Magic Number Brazilian Stock Screener</h2></div>
+      <div className="stock-container">
+        {stocks.length === 0 ? (
+          <p className="no-stocks">No stocks available</p>
+        ) : (
+          <table className="stock-table">
+            <thead>
+              <tr>
+                <th onClick={() => sortStocks('ticker')}>Ticker{renderSortArrow('ticker')}</th>
+                <th onClick={() => sortStocks('name')}>Nome{renderSortArrow('name')}</th>
+                <th onClick={() => sortStocks('price')}>Preço{renderSortArrow('price')}</th>
+                <th onClick={() => sortStocks('peRatio')}>P/L 3 anos{renderSortArrow('peRatio')}</th>
+                <th onClick={() => sortStocks('roe2')}>ROE 3 anos{renderSortArrow('roe2')}</th>
+                <th onClick={() => sortStocks('magicNumber')}>Magic Number{renderSortArrow('magicNumber')}</th>
 
-
-            </tr>
-          </thead>
-          <tbody>
-            {stocks.map((stock) => (
-              <tr key={stock._id} >
-                <td>{stock.ticker}</td>
-                <td>{stock.name} </td>
-                <td>R${(stock.price / 100).toLocaleString()}</td>
-                <td>{stock.peRatio}</td>
-                <td>{(stock.roe2 * 100).toLocaleString()} %</td>
 
               </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+            </thead>
+            <tbody>
+              {stocks.map((stock) => (
+                <tr key={stock._id} >
+                  <td>{stock.ticker}</td>
+                  <td>{stock.name} </td>
+                  <td>R${(stock.price / 100).toLocaleString()}</td>
+                  <td>{stock.peRatio}</td>
+                  <td>{(stock.roe2 * 100).toLocaleString()} %</td>
+                  <td>{stock.magicNumber}</td>
 
-      {isModalOpen && selectedStock && (
-        <FinancialModal
-          stock={selectedStock}
-          onClose={closeModal}
-        />
-      )}
-    </div>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+
+        {isModalOpen && selectedStock && (
+          <FinancialModal
+            stock={selectedStock}
+            onClose={closeModal}
+          />
+        )}
+      </div>
+    </>
   );
 }
 

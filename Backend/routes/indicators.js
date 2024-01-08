@@ -43,7 +43,7 @@ function calculateTwoYearROE(stock) {
         return acc;
     }, {});
 
-    let roe2022, roe2021;
+    let roe2022, roe2021, roe2020;
 
     // Find the lucro for 2022 and the patrimonioLiquido for 2021
     const financial2022 = stock.financials.find(financial => financial.year === 2022);
@@ -57,9 +57,14 @@ function calculateTwoYearROE(stock) {
         roe2021 = financial2021.lucro / equityByYear[2020];
     }
 
+    const financial2020 = stock.financials.find(financial => financial.year === 2020);
+    if (financial2020 && equityByYear[2019]) {
+        roe2020 = financial2020.lucro / equityByYear[2019];
+    }
+
     // Ensure we have both ROEs to calculate the average
-    if (roe2022 != null && roe2021 != null) {
-        const averageROE = (roe2022 + roe2021) / 2;
+    if (roe2022 != null && roe2021 != null && roe2020 != null) {
+        const averageROE = (roe2022 + roe2021 + roe2020) / 3;
         return parseFloat(averageROE.toFixed(2)); // Format to 2 decimal places
     } else {
         return null; // Not enough data to calculate average ROE

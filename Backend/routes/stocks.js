@@ -36,7 +36,7 @@ router.get('/stocks-admin', (req, res) => {
 router.patch('/stocks/:id/financials', async (req, res) => {
     try {
         const stockId = req.params.id;
-        const financialData = req.body; // Assuming this contains the financial data to add
+        const financialData = req.body;
 
         // Find the stock and update its financials array
         const stock = await Stonk.findById(stockId);

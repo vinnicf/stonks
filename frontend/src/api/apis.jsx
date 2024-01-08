@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+// Define the base URL for the API
+const API_BASE_URL = 'https://stonks-hv12.onrender.com/stocks';
 
 
 const fetchStocks = async () => {
     try {
-        const response = await fetch('http://localhost:3000/stocks');
+        const response = await fetch(`${API_BASE_URL}`);
         const data = await response.json();
         return data;
     } catch (error) {
@@ -16,7 +18,7 @@ const fetchStocks = async () => {
 
 const updateStockPrice = async (stockId, newPrice) => {
     try {
-        const response = await axios.patch(`http://localhost:3000/stocks/${stockId}/`, { price: newPrice });
+        const response = await axios.patch(`${API_BASE_URL}/${stockId}/`, { price: newPrice });
         return response.data;
     } catch (error) {
         console.error('Error updating stock price:', error);
@@ -27,7 +29,7 @@ const updateStockPrice = async (stockId, newPrice) => {
 // Function to send PATCH request
 const updateFinancialData = async (stockId, financialData) => {
     try {
-        const response = await axios.patch(`http://localhost:3000/stocks/${stockId}/financials`, financialData);
+        const response = await axios.patch(`${API_BASE_URL}/${stockId}/financials`, financialData);
         return response.data;
     } catch (error) {
         console.error('Error updating financial data:', error);
@@ -37,7 +39,7 @@ const updateFinancialData = async (stockId, financialData) => {
 
 const deleteFinancialData = async (stockId, financialId) => {
     try {
-        await axios.delete(`http://localhost:3000/stocks/${stockId}/financials/${financialId}`);
+        await axios.delete(`${API_BASE_URL}/${stockId}/financials/${financialId}`);
         // Update your state or UI here after successful deletion
     } catch (error) {
         console.error('Error deleting financial data:', error);
